@@ -7,45 +7,59 @@ const scrape = async () => {
   await page.waitFor(1000);
 
   const result = await page.evaluate(() => {
+    const getRows = () => {
+      return document.querySelectorAll('tbody tr');
+    };
+
+    const getCells = (row) => {
+      return row.cells
+    };
+
+    const getCellStatus = (num) => {
+      return cellStatus[num];
+    }
+
+    const setCellData = (index, data) => {
+      cellStatus[index].data = data;
+    }
+
+    const setCellRowspan = (index, num) => {
+      cellStatus[index].rowspan = num;
+    }
+
     const data = [];
-    const rows = document.querySelectorAll('tbody tr');
-    const lastSong = {data: '', rowspan: 0};
-    const lastArtist = {data: '', rowspan: 0};
-    const lastReleaseYear = {data: '', rowspan: 0};
-    const lastTuning = {data: '', rowspan: 0};
-    const lastPack = {data: '', rowspan: 0};
-    const lastDate = {data: '', rowspan: 0};
+    const rows = getRows();
 
-    const currentElemHasRowspan = (elem) => {
-      return elem.getAttribute('rowspan');
-    }
+    const cellStatus = {
+      0: {data: '', rowspan: 0},
+      1: {data: '', rowspan: 0},
+      2: {data: '', rowspan: 0},
+      3: {data: '', rowspan: 0},
+      4: {data: '', rowspan: 0},
+      7: {data: '', rowspan: 0}
+    };
 
-    const testColumn = (elem, i, columnNumber) => {
-      if (elem.rowspan > 0) {
-        elem.rowspan -= 1;
-        return elem.data;
-      } else if (currentElemHasRowspan) {
-        elem.data = rows[i].querySelector(`td:nth-of-type(${columnNumber})`).innerText.match(/[^"]/g).join('');
-        elem.rowspan = parseInt(rows[i].querySelector(`td:nth-of-type(${columnNumber})`).getAttribute('rowspan')) - 1;
-        return elem.data
-      } else {
-        return rows[i].querySelector(`td:nth-of-type(${columnNumber})`).innerText.match(/[^"]/g).join('');
-      }
-    }
+    rows.forEach(row => {
+      let cells = getCells(row);
+      cells = Array.prototype.slice.call( cells )
 
-    for(var i = 0; i <= rows.length - 1; i++) {
-      const song = testColumn(lastSong, i, 1);
-      const artist = testColumn(lastArtist, i, 2);
-      const year = testColumn(lastReleaseYear, i, 3);
-      // currentRowInfo.releaseYear = row.querySelector('td:nth-of-type(3)').innerText;
-      // currentRowInfo.tuning = '',
-      // currentRowInfo.pack = '',
-      // currentRowInfo.date = ''
-
-      data.push({song, artist});
-    }
-
-    return data;
+      const cellResult = cells.forEach((cell, index) => {
+        debugger;
+        if (cell.innerText === 'N/A' || cell.innerText === "") {
+          return null;
+        } else if (getCellStatus(index).rowspan > 0) {
+          setCellRowspan(index, getCellStatus(index).rowspan - 1);
+          return getCellStatus(index).data
+        } else if (cell.getAttribute('rowspan')) {
+          setCellData(index, cell.innerText.match(/[^"]/g).join(''));
+          setCellRowspan(index, cell.getAttribute('rowspan') - 1)
+          return getCellStatus(index).data;
+        } else {
+          return cell.innerText.match(/[^"]/g).join('')
+        }
+      });
+      data.push(cellResult);
+    });
   });
 
   browser.close();

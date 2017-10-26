@@ -25,20 +25,25 @@ const scrape = async () => {
       return arr.slice(startIndex, index1).concat(arr.slice(index1 + 1, index2));
     };
 
+    const getRowSpanIndexes = arr => {
+      const data = arr.filter(elem => elem.rowspan);
+      return data.map(item => item.index);
+    };
+
     const rowspanCells = arr => arr.filter(elem => elem.rowspan);
 
     const allData = {};
-    const rows = getRowsArray('tbody tr:nth-child(-n+5)');
+    const rows = getRowsArray('tbody tr:nth-child(-n+15)');
 
     const cellStatus = [
-      {text: '', rowspan: 0},
-      {text: '', rowspan: 0},
-      {text: '', rowspan: 0},
-      {text: '', rowspan: 0},
-      {text: '', rowspan: 0},
-      {text: '', rowspan: 0},
-      {text: '', rowspan: 0},
-      {text: '', rowspan: 0}
+      {index: 0, text: '', rowspan: 0},
+      {index: 1, text: '', rowspan: 0},
+      {index: 2, text: '', rowspan: 0},
+      {index: 3, text: '', rowspan: 0},
+      {index: 4, text: '', rowspan: 0},
+      {index: 5, text: '', rowspan: 0},
+      {index: 6, text: '', rowspan: 0},
+      {index: 7, text: '', rowspan: 0}
     ];
 
     // var row0Cells = convertToArray(getCellsArray(rows[0]));
@@ -53,26 +58,31 @@ const scrape = async () => {
     // var row4CellsText = getCellsTextArray(row4Cells);
 
     const populateDataObj = () => {
-      rows.forEach((row, index) => {
+      rows.forEach((row, rowIndex) => {
+        debugger;
         let rowData = [];
         let rowCells = convertToArray(getCellsArray(row));
+        if (rowCells.length < 8) {
+          let indexes = getRowSpanIndexes(cellStatus);
+          indexes.forEach(rowIndex => rowCells.splice(rowIndex, 0, {innerText: getCellStatus(rowIndex).text}))
+        }
         let rowCellsText = getCellsTextArray(rowCells);
 
-        rowCells.forEach((cell, index) => {
-          if (getCellStatus(index).rowspan) { //cellStatus has rowspan > 0
-            rowData.push(getCellStatus(index).text);
-            setCellRowspan(index, getCellStatus(index).rowspan - 1)
+        rowCells.forEach((cell, cellIndex) => {
+          if (getCellStatus(cellIndex).rowspan) { //cellStatus has rowspan > 0
+            rowData.push(rowCellsText[cellIndex]);
+            setCellRowspan(cellIndex, getCellStatus(cellIndex).rowspan - 1)
           }
           else if (cell.getAttribute('rowspan')) { //td has rowspan attribute
-            setCellRowspan(index, cell.getAttribute('rowspan'));
-            setCellContent(index, cell.innerText);
-            rowData.push(rowCellsText[index])
+            setCellRowspan(cellIndex, cell.getAttribute('rowspan') - 1);
+            setCellContent(cellIndex, cell.innerText);
+            rowData.push(rowCellsText[cellIndex])
           }
           else { //cellStatus has rowspan = 0 and td does not have rowspan attribute
-            rowData.push(rowCellsText[index])
+            rowData.push(rowCellsText[cellIndex])
           }
         });
-        allData[index] = removeUnwantedText(rowData);
+        allData[rowIndex] = removeUnwantedText(rowData);
       });
     }
 

@@ -15,47 +15,57 @@ const scrape = async () => {
 
     const getCellsTextArray = arr => arr.map(item => item.innerText)
 
-    const getCellStatus = index => cellStatus[index];
+    const getCellText = index => cellStatus[index].text;
 
-    const setCellContent = (index, content) => cellStatus[index].text = content;
+    const getCellRowspan = index => cellStatus[index].rowspan;
+
+    const getCellColspan = index => cellStatus[index].colspan;
+
+    const setCellText = (index, content) => cellStatus[index].text = content;
 
     const setCellRowspan = (index, num) => cellStatus[index].rowspan = num;
+
+    const setCellColspan = (index, num) => cellStatus[index].colspan = num;
 
     const removeUnwantedText = (arr, startIndex = 0, index1 = 5, index2 = 7) => {
       return arr.slice(startIndex, index1).concat(arr.slice(index1 + 1, index2));
     };
 
-    const getRowSpanIndexes = arr => {
-      const data = arr.filter(elem => elem.rowspan);
-      return data.map(item => item.index);
+    const getSpanIndexes = arr => {
+      const rowSpans = arr.filter(elem => elem.rowspan);
+      const colSpans = arr.filter(elem => elem.colspan);
+      return [rowSpans, colSpans];
     };
 
-    const rowspanCells = arr => arr.filter(elem => elem.rowspan);
+    const rowspanGreaterThanZero = () => {
+
+    }
+
+    const colspanGreaterThanZero = () => {
+
+    }
+
+    const cellHasRowspanAttribute = () => {
+
+    }
+
+    const cellHasColspanAttribute = () => {
+
+    }
 
     const allData = {};
-    const rows = getRowsArray('tbody tr:nth-child(-n+15)');
+    var rows = getRowsArray('tbody tr:nth-child(-n+11)');
 
     const cellStatus = [
-      {index: 0, text: '', rowspan: 0},
-      {index: 1, text: '', rowspan: 0},
-      {index: 2, text: '', rowspan: 0},
-      {index: 3, text: '', rowspan: 0},
-      {index: 4, text: '', rowspan: 0},
-      {index: 5, text: '', rowspan: 0},
-      {index: 6, text: '', rowspan: 0},
-      {index: 7, text: '', rowspan: 0}
+      {index: 0, text: '', rowspan: 0, colspan: 0},
+      {index: 1, text: '', rowspan: 0, colspan: 0},
+      {index: 2, text: '', rowspan: 0, colspan: 0},
+      {index: 3, text: '', rowspan: 0, colspan: 0},
+      {index: 4, text: '', rowspan: 0, colspan: 0},
+      {index: 5, text: '', rowspan: 0, colspan: 0},
+      {index: 6, text: '', rowspan: 0, colspan: 0},
+      {index: 7, text: '', rowspan: 0, colspan: 0}
     ];
-
-    // var row0Cells = convertToArray(getCellsArray(rows[0]));
-    // var row1Cells = convertToArray(getCellsArray(rows[1]));
-    // var row2Cells = convertToArray(getCellsArray(rows[2]));
-    // var row3Cells = convertToArray(getCellsArray(rows[3]));
-    // var row4Cells = convertToArray(getCellsArray(rows[4]));
-    // var row0CellsText = getCellsTextArray(row0Cells);
-    // var row1CellsText = getCellsTextArray(row1Cells);
-    // var row2CellsText = getCellsTextArray(row2Cells);
-    // var row3CellsText = getCellsTextArray(row3Cells);
-    // var row4CellsText = getCellsTextArray(row4Cells);
 
     const populateDataObj = () => {
       rows.forEach((row, rowIndex) => {

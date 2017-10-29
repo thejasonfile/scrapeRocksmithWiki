@@ -23,10 +23,8 @@ const scrape = async () => {
     const doesCellHaveRowspan = cell => cell.getAttribute('rowspan')
     const doesCellHaveColspan = cell => cell.getAttribute('colspan')
 
-    const cellWithRowspan = (cell, rowIndex, text) => {
-      debugger;
+    const cellWithRowspan = (cell, rowIndex, cellIndex, text) => {
       let num = cell.getAttribute('rowspan') - 1;
-      let cellIndex = cell.cellIndex;
 
       while (num > 0) {
         rowIndex += 1;
@@ -35,21 +33,25 @@ const scrape = async () => {
       };
     }
 
-    const replaceTextInCellWithCurrentText = (cell, rowIndex) => {
-      cellObject[rowIndex][cell.cellIndex] = cell.innerText;
+    const replaceCellObjectWithText = (cell, rowIndex, cellIndex) => {
+      cellObject[rowIndex][cellIndex] = cell.innerText;
     }
+
+    const replaceStringWithString = cell => cellObject
 
     const rowsArr = getRowsArray('tbody tr:nth-child(-n+11)');
     buildCellObject(rowsArr);
 
     cellObject.forEach((row, rowIndex) => {
-      row.forEach(cell => {
+      row.forEach((cell, cellIndex) => {
         debugger;
-        if(doesCellHaveRowspan(cell)) {
-          cellWithRowspan(cell, rowIndex, cell.innerText);
-          replaceTextInCellWithCurrentText(cell, rowIndex)
+        if (typeof cell === 'string') {
+          //null
+        } else if (doesCellHaveRowspan(cell)) {
+          cellWithRowspan(cell, rowIndex, cellIndex, cell.innerText);
+          replaceCellObjectWithText(cell, rowIndex, cellIndex)
         } else {
-          replaceTextInCellWithCurrentText(cell, rowIndex)
+          replaceCellObjectWithText(cell, rowIndex, cellIndex)
         }
       })
     })

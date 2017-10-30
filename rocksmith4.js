@@ -54,22 +54,25 @@ for (let i = 0; i < rowsArr.length - 1; i += 1) {
   result[i] = [];
   const rowArr = convertToArray(rowsArr[i].cells);
   const colspanCells = rowArr.filter(cell => cell.getAttribute('colspan'));
-  if (colspanCells.length > 0) {
-    colspanCells.forEach(colspanCell => {
-      debugger;
-      const numOfCells = colspanCell.getAttribute('colspan') - 2;
-      rowArr.splice(colspanCell.cellIndex + 1, numOfCells, {});
-      result[i][colspanCell.cellIndex + 1] = (rowArr[colspanCell.cellIndex].innerText);
-    });
-  }
+  // if (colspanCells.length > 0) {
+  //   colspanCells.forEach(colspanCell => {
+  //     debugger;
+  //     const numOfCells = colspanCell.getAttribute('colspan') - 2;
+  //     rowArr.splice(colspanCell.cellIndex + 1, numOfCells, {});
+  //     result[i][colspanCell.cellIndex + 1] = (rowArr[colspanCell.cellIndex].innerText);
+  //   });
+  // }
   rowspanTracker.forEach((cellObj) => {
     if (cellObj.rowspan > 0) {
       rowArr.splice(cellObj.index, 0, {});
     }
   });
   for (let j = 0; j < rowArr.length; j += 1) {
-    if(i === 10) {
+    if (rowArr[j].getAttribute && rowArr[j].getAttribute('colspan')) {
       debugger;
+      //const num = rowArr[j].getAttribute('colspan') - 1;
+      const index = rowArr[j].cellIndex;
+      result[i][j + 1] = rowArr[j].innerText;
     }
     if (result[i] && typeof result[i][j] === 'string') {
       //skip

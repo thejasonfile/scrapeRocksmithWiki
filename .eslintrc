@@ -8,7 +8,7 @@
     "no-debugger": 1,
     "object-curly-newline": ["error", {
       "minProperties": 5
-    }]
+    }],
     "comma-dangle": 0
     }
 }

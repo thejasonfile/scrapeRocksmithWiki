@@ -418,7 +418,7 @@ eslint-config-airbnb-standard@^1.5.0:
     eslint-plugin-react "^7"
     eslint-plugin-standard "^3"
 
-eslint-config-airbnb@^16, eslint-config-airbnb@^16.1.0:
+eslint-config-airbnb@^16:
   version "16.1.0"
   resolved "https://registry.yarnpkg.com/eslint-config-airbnb/-/eslint-config-airbnb-16.1.0.tgz#2546bfb02cc9fe92284bf1723ccf2e87bc45ca46"
   dependencies:
@@ -469,7 +469,7 @@ eslint-plugin-jsx-a11y@^6, eslint-plugin-jsx-a11y@^6.0.2:
     emoji-regex "^6.1.0"
     jsx-ast-utils "^1.4.0"
 
-eslint-plugin-node@^5:
+eslint-plugin-node@^5, eslint-plugin-node@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-node/-/eslint-plugin-node-5.2.1.tgz#80df3253c4d7901045ec87fa660a284e32bdca29"
   dependencies:
@@ -491,7 +491,7 @@ eslint-plugin-react@^7, eslint-plugin-react@^7.4.0:
     jsx-ast-utils "^2.0.0"
     prop-types "^15.5.10"
 
-eslint-plugin-standard@^3:
+eslint-plugin-standard@^3, eslint-plugin-standard@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-standard/-/eslint-plugin-standard-3.0.1.tgz#34d0c915b45edc6f010393c7eef3823b08565cf2"
 
